@@ -1,9 +1,7 @@
 package com.omendezv.movieapi.repository;
 
-import com.omendezv.movieapi.domain.Entity.Actor;
-import com.omendezv.movieapi.domain.Entity.Movie;
-import com.omendezv.movieapi.domain.Entity.MovieActor;
-import com.omendezv.movieapi.domain.Entity.MovieActorId;
+import com.omendezv.movieapi.repository.Entity.MovieActor;
+import com.omendezv.movieapi.repository.Entity.MovieActorId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,4 +1,4 @@
-package com.omendezv.movieapi.domain.Entity;
+package com.omendezv.movieapi.repository.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

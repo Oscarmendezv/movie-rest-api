@@ -1,7 +1,7 @@
 package com.omendezv.movieapi.service;
 
-import com.omendezv.movieapi.domain.DTO.ActorDTO;
-import com.omendezv.movieapi.domain.Entity.Actor;
+import com.omendezv.movieapi.DTO.ActorDTO;
+import com.omendezv.movieapi.repository.Entity.Actor;
 import com.omendezv.movieapi.repository.IActorDAO;
 import org.junit.Before;
 import org.junit.Test;

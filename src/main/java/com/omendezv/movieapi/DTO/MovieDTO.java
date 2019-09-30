@@ -1,7 +1,4 @@
-package com.omendezv.movieapi.domain.DTO;
-
-import com.omendezv.movieapi.domain.Entity.Actor;
-import com.omendezv.movieapi.domain.enums.MovieGenresEnum;
+package com.omendezv.movieapi.DTO;
 
 import java.io.Serializable;
 import java.util.List;

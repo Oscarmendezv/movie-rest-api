@@ -1,4 +1,4 @@
-package com.omendezv.movieapi.domain.enums;
+package com.omendezv.movieapi.repository.Entity.enums;
 
 public enum MovieGenresEnum {
     ACTION,

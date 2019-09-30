@@ -29,4 +29,4 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/java/com/omendezv/movieapi/domain/Entity/User.java
+/src/main/java/com/omendezv/movieapi/repository/Entity/User.java

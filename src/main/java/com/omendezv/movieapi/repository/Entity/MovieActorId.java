@@ -1,4 +1,4 @@
-package com.omendezv.movieapi.domain.Entity;
+package com.omendezv.movieapi.repository.Entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

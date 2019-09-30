@@ -1,42 +1,19 @@
 package com.omendezv.movieapi.controller;
 
-import com.omendezv.movieapi.domain.DTO.ActorDTO;
-import com.omendezv.movieapi.domain.Entity.Actor;
-import com.omendezv.movieapi.service.IActorService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.omendezv.movieapi.DTO.ActorDTO;
+import com.omendezv.movieapi.repository.Entity.Actor;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/actors")
-public class ActorController {
+public interface ActorController {
 
-    @Autowired
-    private IActorService actorService;
+    List<ActorDTO> getAllActors();
 
-    @GetMapping
-    public List<ActorDTO> getAllActors(){
-        return actorService.findAllActors();
-    }
+    ActorDTO getActorById(Long id);
 
-    @GetMapping("/{id}")
-    public ActorDTO getActorById(@PathVariable Long id) {
-        return actorService.findActorById(id);
-    }
+    List<ActorDTO> getActorsByName( String name);
 
-    @GetMapping("/search/{name}")
-    public List<ActorDTO> getActorsByName(@PathVariable String name) {
-        return actorService.findActorsByName(name);
-    }
+    ActorDTO createActor(Actor actor);
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
-    public ActorDTO createActor(@RequestBody Actor actor) {
-        return actorService.createActor(actor);
-    }
-
-    @PutMapping("/{id}")
-    public ActorDTO updateActor(@PathVariable Long id, @RequestBody Actor actor) {
-        return actorService.updateActor(actor);
-    }
+    ActorDTO updateActor(Long id, Actor actor);
 }

@@ -1,12 +1,13 @@
 package com.omendezv.movieapi.service;
 
-import com.omendezv.movieapi.domain.DTO.MovieDTO;
-import com.omendezv.movieapi.domain.Entity.Movie;
-import com.omendezv.movieapi.domain.enums.MovieGenresEnum;
+import com.omendezv.movieapi.DTO.MovieDTO;
+import com.omendezv.movieapi.repository.Entity.Movie;
+import com.omendezv.movieapi.repository.Entity.enums.MovieGenresEnum;
 import com.omendezv.movieapi.exceptions.MovieInsertException;
 import com.omendezv.movieapi.exceptions.MovieNotFoundException;
 import com.omendezv.movieapi.repository.IMovieActorDAO;
 import com.omendezv.movieapi.repository.IMovieDAO;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -88,21 +89,22 @@ public class MovieServiceTests {
     @Test(expected = MovieNotFoundException.class)
     public void movieNotFoundByIdTest() {
         Mockito.when(movieDAO.findById(0L)).thenThrow(MovieNotFoundException.class);
-        MovieDTO movie = movieService.findMovieById(0L);
+        movieService.findMovieById(0L);
     }
 
     @Test
     public void createMovieTest() {
         Mockito.when(movieDAO.save(any(Movie.class))).thenReturn(savedMovie2);
-        MovieDTO createdMovie = movieService.createMovie(movieService.movieEntityToDTO(savedMovie2, false));
+        Long createdMovieId = movieService.createMovie(movieService.movieEntityToDTO(savedMovie2, false));
 
-        assertNotNull(createdMovie);
+        assertNotNull(createdMovieId);
+        assertEquals(savedMovie2.getId(), createdMovieId);
     }
 
     @Test(expected = MovieInsertException.class)
     public void createMovieExceptionTest() {
         Mockito.when(movieDAO.findById(savedMovie3.getId())).thenReturn(Optional.of(savedMovie3));
-        MovieDTO createdMovie = movieService.createMovie(movieService.movieEntityToDTO(savedMovie3, false));
+        movieService.createMovie(movieService.movieEntityToDTO(savedMovie3, false));
     }
 
     @Test
@@ -112,6 +114,7 @@ public class MovieServiceTests {
         List<MovieDTO> moviesByGenre = movieService.findMovieByGenre(MovieGenresEnum.SCI_FI);
 
         assertNotNull(moviesByGenre);
+        assertEquals(movies.size(), moviesByGenre.size());
     }
 
     @Test
@@ -120,9 +123,10 @@ public class MovieServiceTests {
         Mockito.when(movieDAO.findById(savedMovie2.getId())).thenReturn(Optional.of(savedMovie3));
         Mockito.when(movieActorDAO.findByMovieActorIdMovieId(savedMovie2.getId())).thenReturn(null);
         Mockito.when(movieDAO.save(any(Movie.class))).thenReturn(savedMovie2);
-        MovieDTO updatedMovie = movieService.updateMovie(savedMovieDTO);
+        Long id = movieService.updateMovie(savedMovieDTO);
 
-        assertNotNull(updatedMovie);
+        assertNotNull(id);
+        assertEquals(savedMovie2.getId(), id);
     }
 
     @Test(expected = MovieNotFoundException.class)
@@ -130,5 +134,19 @@ public class MovieServiceTests {
         MovieDTO savedMovieDTO = movieService.movieEntityToDTO(savedMovie2, false);
         Mockito.when(movieDAO.findById(savedMovie2.getId())).thenThrow(MovieNotFoundException.class);
         movieService.updateMovie(savedMovieDTO);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGreaterYear() {
+        savedMovie1.setYear(20000);
+        Mockito.when(movieDAO.save(any(Movie.class))).thenReturn(savedMovie1);
+        movieService.createMovie(movieService.movieEntityToDTO(savedMovie2, false));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testLowerYear() {
+        savedMovie1.setYear(1880);
+        Mockito.when(movieDAO.save(any(Movie.class))).thenReturn(savedMovie1);
+        movieService.createMovie(movieService.movieEntityToDTO(savedMovie2, false));
     }
 }

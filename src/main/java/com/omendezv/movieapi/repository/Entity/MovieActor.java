@@ -1,6 +1,6 @@
-package com.omendezv.movieapi.domain.Entity;
+package com.omendezv.movieapi.repository.Entity;
 
-import com.omendezv.movieapi.domain.enums.ActorRolesEnum;
+import com.omendezv.movieapi.repository.Entity.enums.ActorRolesEnum;
 
 import javax.persistence.*;
 

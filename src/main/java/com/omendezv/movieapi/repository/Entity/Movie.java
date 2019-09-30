@@ -1,15 +1,13 @@
-package com.omendezv.movieapi.domain.Entity;
+package com.omendezv.movieapi.repository.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.omendezv.movieapi.domain.enums.MovieGenresEnum;
+import com.omendezv.movieapi.repository.Entity.enums.MovieGenresEnum;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 
 import javax.persistence.*;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Set;
 
 @Entity
@@ -87,9 +85,6 @@ public class Movie implements Identifiable {
     }
 
     public void setYear(int year) {
-        if (year > ZonedDateTime.now(ZoneId.of("Europe/Madrid")).getYear() || year < 1888) {
-            throw new IllegalArgumentException("Year must be valid");
-        }
         this.year = year;
     }
 
