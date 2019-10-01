@@ -46,7 +46,11 @@ public class MovieServiceTests {
     private Movie savedMovie1;
     private Movie savedMovie2;
     private Movie savedMovie3;
-    private MovieDTO savedMovieDTO;
+
+    private List<MovieDTO> moviesDTO;
+    private MovieDTO savedMovieDTO1;
+    private MovieDTO savedMovieDTO2;
+    private MovieDTO savedMovieDTO3;
 
     @Before
     public void init() {
@@ -75,16 +79,36 @@ public class MovieServiceTests {
         movies.add(savedMovie2);
         movies.add(savedMovie3);
 
-        savedMovieDTO = new MovieDTO();
-        savedMovieDTO.setId(2L);
-        savedMovieDTO.setTitle("American History X");
-        savedMovieDTO.setMovieGenre("DRAMA");
-        savedMovieDTO.setYear(2002);
+        moviesDTO = new ArrayList<>();
+        savedMovieDTO1 = new MovieDTO();
+        savedMovieDTO2 = new MovieDTO();
+        savedMovieDTO3 = new MovieDTO();
+
+
+        savedMovieDTO1.setId(1L);
+        savedMovieDTO1.setTitle("Buscando a Nemo");
+        savedMovieDTO1.setMovieGenre(MovieGenresEnum.ADVENTURE.toString());
+        savedMovieDTO1.setYear(2001);
+
+        savedMovieDTO2.setId(2L);
+        savedMovieDTO2.setTitle("American History X");
+        savedMovieDTO2.setMovieGenre(MovieGenresEnum.DRAMA.toString());
+        savedMovieDTO2.setYear(2002);
+
+        savedMovieDTO3.setId(3L);
+        savedMovieDTO3.setTitle("Yo robot");
+        savedMovieDTO3.setMovieGenre(MovieGenresEnum.SCI_FI.toString());
+        savedMovieDTO3.setYear(2003);
+
+        moviesDTO.add(savedMovieDTO1);
+        moviesDTO.add(savedMovieDTO2);
+        moviesDTO.add(savedMovieDTO3);
     }
 
     @Test
     public void findAllTest() {
         Mockito.when(movieDAO.findAll()).thenReturn(movies);
+        Mockito.when(movieMapper.processMovieListToMovieDTO(movies)).thenReturn(moviesDTO);
         List<MovieDTO> obtainedMovies = movieService.findAllMovies();
 
         assertNotNull(obtainedMovies);
@@ -93,6 +117,7 @@ public class MovieServiceTests {
     @Test
     public void findMovieByIdTest() {
         Mockito.when(movieDAO.findById(1L)).thenReturn(Optional.of(savedMovie1));
+        Mockito.when(movieMapper.movieEntityToDTO(savedMovie1, true)).thenReturn(savedMovieDTO1);
         MovieDTO obtainedMovie = movieService.findMovieById(1L);
 
         assertNotNull(obtainedMovie);
@@ -107,7 +132,9 @@ public class MovieServiceTests {
     @Test
     public void createMovieTest() {
         Mockito.when(movieDAO.save(any(Movie.class))).thenReturn(savedMovie2);
-        Long createdMovieId = movieService.createMovie(movieMapper.movieEntityToDTO(savedMovie2, false));
+        Mockito.when(movieMapper.movieEntityToDTO(savedMovie2, true)).thenReturn(savedMovieDTO2);
+        Mockito.when(movieMapper.movieDTOtoEntity(savedMovieDTO2)).thenReturn(savedMovie2);
+        Long createdMovieId = movieService.createMovie(savedMovieDTO2);
 
         assertNotNull(createdMovieId);
         assertEquals(savedMovie2.getId(), createdMovieId);
@@ -116,13 +143,14 @@ public class MovieServiceTests {
     @Test(expected = MovieInsertException.class)
     public void createMovieExceptionTest() {
         Mockito.when(movieDAO.findById(savedMovie3.getId())).thenReturn(Optional.of(savedMovie3));
-        movieService.createMovie(movieMapper.movieEntityToDTO(savedMovie3, false));
+        movieService.createMovie(savedMovieDTO3);
     }
 
     @Test
     public void findMovieByGenreTest() {
         Mockito.when(movieDAO.findByMovieGenre(MovieGenresEnum.SCI_FI)).thenReturn(movies);
         Mockito.when(movieActorDAO.findByMovieActorIdMovieId(savedMovie2.getId())).thenReturn(Collections.emptyList());
+        Mockito.when(movieMapper.processMovieListToMovieDTO(movies)).thenReturn(moviesDTO);
         List<MovieDTO> moviesByGenre = movieService.findMovieByGenre(MovieGenresEnum.SCI_FI);
 
         assertNotNull(moviesByGenre);
@@ -134,9 +162,9 @@ public class MovieServiceTests {
         Mockito.when(movieDAO.findById(savedMovie2.getId())).thenReturn(Optional.of(savedMovie3));
         Mockito.when(movieActorDAO.findByMovieActorIdMovieId(savedMovie2.getId())).thenReturn(null);
         Mockito.when(movieDAO.save(any(Movie.class))).thenReturn(savedMovie2);
-        Mockito.when(movieMapper.movieEntityToDTO(savedMovie2, true)).thenReturn(savedMovieDTO);
-        Mockito.when(movieMapper.movieEntityToDTO(savedMovie3, true)).thenReturn(savedMovieDTO);
-        Long id = movieService.updateMovie(savedMovieDTO);
+        Mockito.when(movieMapper.movieDTOtoEntity(savedMovieDTO2)).thenReturn(savedMovie2);
+        Mockito.when(movieMapper.movieEntityToDTO(savedMovie3, true)).thenReturn(savedMovieDTO3);
+        Long id = movieService.updateMovie(savedMovieDTO2);
 
         assertNotNull(id);
         assertEquals(savedMovie2.getId(), id);
@@ -145,21 +173,6 @@ public class MovieServiceTests {
     @Test(expected = MovieNotFoundException.class)
     public void updateMovieNotFoundTest() {
         Mockito.when(movieDAO.findById(savedMovie2.getId())).thenThrow(MovieNotFoundException.class);
-        MovieDTO savedMovieDTO = movieMapper.movieEntityToDTO(savedMovie2, false);
-        movieService.updateMovie(savedMovieDTO);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGreaterYear() {
-        Mockito.when(movieDAO.save(any(Movie.class))).thenReturn(savedMovie1);
-        savedMovie1.setYear(20000);
-        movieService.createMovie(movieMapper.movieEntityToDTO(savedMovie2, false));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testLowerYear() {
-        Mockito.when(movieDAO.save(any(Movie.class))).thenReturn(savedMovie1);
-        savedMovie1.setYear(1880);
-        movieService.createMovie(movieMapper.movieEntityToDTO(savedMovie2, false));
+        movieService.updateMovie(savedMovieDTO2);
     }
 }
