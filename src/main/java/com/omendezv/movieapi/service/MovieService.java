@@ -23,17 +23,5 @@ public interface MovieService {
 
     Long updateMovie(MovieDTO movieDTO);
 
-    MovieDTO movieEntityToDTO(Movie movie, boolean includeActors);
-
-    List<ActorDTO> setActorsToMovieDTO(MovieDTO movieDTO);
-
-    List<MovieDTO> processMovieListToMovieDTO(List<Movie> movieList);
-
-    Movie movieDTOtoEntity(MovieDTO movieDTO);
-
     void deleteMovieById(Long id);
-
-    Set<MovieActor> fillMovieActorSet(Set<MovieActor> movieActorSet, Movie movie);
-
-    Set<MovieActor> fillMovieEntityActors(List<ActorDTO> actorsWhoPerformed, Movie movie);
 }

@@ -19,12 +19,4 @@ public interface ActorService {
     ActorDTO updateActor(Actor actor);
 
     void deleteActorById(Long id);
-
-    ActorDTO actorEntityToDTO(Actor actor, boolean includeMovies);
-
-    List<MovieDTO> setMoviesToActorDTO(ActorDTO actorDTO);
-
-    List<ActorDTO> processActorListToActorDTO(List<Actor> actorList);
-
-    Actor actorDTOtoEntity(ActorDTO actorDTO);
 }

@@ -9,7 +9,7 @@ public class ActorDTO implements Serializable {
     private String name;
     private String dateOfBirth;
     private String dateOfDeath;
-    private List<MovieDTO> movieAppearances;
+    private List<Long> movieAppearances;
     private String roleInMovie;
 
     public Long getId() {
@@ -44,11 +44,11 @@ public class ActorDTO implements Serializable {
         this.dateOfDeath = dateOfDeath;
     }
 
-    public List<MovieDTO> getMovieAppearances() {
+    public List<Long> getMovieAppearances() {
         return movieAppearances;
     }
 
-    public void setMovieAppearances(List<MovieDTO> movieAppearances) {
+    public void setMovieAppearances(List<Long> movieAppearances) {
         this.movieAppearances = movieAppearances;
     }
 

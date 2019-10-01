@@ -10,7 +10,7 @@ public class MovieDTO implements Serializable {
     private int year;
     private String movieGenre;
     private String movieSubgenre;
-    private List<ActorDTO> actorsWhoPerformed;
+    private List<Long> actorsWhoPerformed;
 
     public Long getId() {
         return id;
@@ -52,11 +52,11 @@ public class MovieDTO implements Serializable {
         this.movieSubgenre = movieSubgenre;
     }
 
-    public List<ActorDTO> getActorsWhoPerformed() {
+    public List<Long> getActorsWhoPerformed() {
         return actorsWhoPerformed;
     }
 
-    public void setActorsWhoPerformed(List<ActorDTO> actorsWhoPerformed) {
+    public void setActorsWhoPerformed(List<Long> actorsWhoPerformed) {
         this.actorsWhoPerformed = actorsWhoPerformed;
     }
 }
